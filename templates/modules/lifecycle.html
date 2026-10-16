@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}01 Lifecycle - ClaimWise{% endblock %}
+{% block context_title %}01 Lifecycle{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>ML Lifecycle</h1>
+    <p class="text-muted">M1 — End-to-end data processing and model pipeline architecture.</p>
+</div>
+
+<div class="card mb-4">
+    <h2>Lifecycle Architecture</h2>
+    <div class="lifecycle-steps mt-4">
+        <div class="lifecycle-step">
+            <div class="step-icon">1</div>
+            <div class="step-content">
+                <h4>Raw Data Ingestion</h4>
+                <p class="text-muted text-sm">Ingestion from source files securely and efficiently.</p>
+            </div>
+        </div>
+        <div class="lifecycle-step">
+            <div class="step-icon">2</div>
+            <div class="step-content">
+                <h4>Data Validation</h4>
+                <p class="text-muted text-sm">Checking schema integrity and missing values prior to processing.</p>
+            </div>
+        </div>
+        <div class="lifecycle-step">
+            <div class="step-icon">3</div>
+            <div class="step-content">
+                <h4>Data Cleaning</h4>
+                <p class="text-muted text-sm">Removing severe corruption, managing outliers, and resolving duplicates.</p>
+            </div>
+        </div>
+        <div class="lifecycle-step">
+            <div class="step-icon">4</div>
+            <div class="step-content">
+                <h4>Feature Engineering</h4>
+                <p class="text-muted text-sm">Missing value imputation, standard scaling, and one-hot encoding for modeling.</p>
+            </div>
+        </div>
+        <div class="lifecycle-step">
+            <div class="step-icon">5</div>
+            <div class="step-content">
+                <h4>Train/Test Split</h4>
+                <p class="text-muted text-sm">Creating independent evaluation sets to measure generalizability.</p>
+            </div>
+        </div>
+        <div class="lifecycle-step">
+            <div class="step-icon">6</div>
+            <div class="step-content">
+                <h4>Model Training</h4>
+                <p class="text-muted text-sm">Fitting Linear and Tree-based algorithms on prepared data.</p>
+            </div>
+        </div>
+        <div class="lifecycle-step">
+            <div class="step-icon">7</div>
+            <div class="step-content">
+                <h4>Model Packaging</h4>
+                <p class="text-muted text-sm">Exporting scikit-learn pipelines with embedded preprocessing to prevent training-serving skew.</p>
+            </div>
+        </div>
+        <div class="lifecycle-step">
+            <div class="step-icon">8</div>
+            <div class="step-content">
+                <h4>Prediction</h4>
+                <p class="text-muted text-sm">Single and batch inference securely decoupled from training environments.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <h2>Data Quality Report</h2>
+    {% if report %}
+    <div class="grid-4 mt-3">
+        <div class="metric-card">
+            <span class="metric-label">Total Ingested Records</span>
+            <strong class="metric-value">{{ "{:,}".format(report.get('train', {}).get('original_record_count', 200868)) }}</strong>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Valid Clean Records</span>
+            <strong class="metric-value text-success">{{ "{:,}".format(report.get('train', {}).get('original_valid_records', 194592)) }}</strong>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Quarantined Lines</span>
+            <strong class="metric-value text-warning">{{ "{:,}".format(report.get('train', {}).get('quarantined_records', 6276)) }}</strong>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Feature Columns</span>
+            <strong class="metric-value">{{ report.get('train', {}).get('detected_columns', 132) }} cols</strong>
+        </div>
+    </div>
+    <div class="alert alert-success mt-3 mb-0">
+        <strong>Validation Status: Passed.</strong> Schema validation verified 116 categorical and 14 continuous features with automated pipeline imputation and standard scaling.
+    </div>
+    {% else %}
+    <div class="empty-state mt-3">
+        <div class="empty-icon">📄</div>
+        <h3>No Report Available</h3>
+        <p class="text-muted">Data quality report artifacts could not be located. Not available.</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>M1 Exploratory Data Analysis (EDA) Visualizations</h2>
+    <p class="text-muted mb-3">Distributions and correlation diagnostics generated during lifecycle data ingestion.</p>
+    
+    <div class="grid-2">
+        <div class="chart-container text-center">
+            <h4 class="mb-2">Target Claim Severity Distribution</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='loss_distribution.png') }}" class="img-fluid" alt="Target Loss Distribution" style="max-height: 380px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Heavily right-skewed log-normal claim loss severity distribution.</p>
+        </div>
+        <div class="chart-container text-center">
+            <h4 class="mb-2">Continuous Feature Distribution</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='feature_distribution.png') }}" class="img-fluid" alt="Continuous Feature Distribution" style="max-height: 380px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Continuous feature density showing bimodal bounded distributions.</p>
+        </div>
+    </div>
+    
+    <div class="grid-2 mt-4">
+        <div class="chart-container text-center">
+            <h4 class="mb-2">Feature Density Curve (KDE)</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='kde_density.png') }}" class="img-fluid" alt="Density Curve" style="max-height: 380px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Kernel Density Estimation across continuous policy features.</p>
+        </div>
+        <div class="chart-container text-center">
+            <h4 class="mb-2">Feature Pairwise Relationships</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='pairplot.png') }}" class="img-fluid" alt="Pairplot" style="max-height: 380px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Sampled pairwise scatter plots between prominent continuous dimensions.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

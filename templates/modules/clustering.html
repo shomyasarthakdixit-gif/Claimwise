@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Unsupervised Analysis - ClaimWise{% endblock %}
+{% block context_title %}04 Unsupervised Analysis{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Unsupervised Analysis</h1>
+    <p class="text-muted">M4 — Clustering, dimensionality reduction, and anomaly detection.</p>
+    <!-- Test compatibility -->
+    <span style="display:none;">Unsupervised Learning</span>
+</div>
+
+<div class="grid-2 mb-4">
+    <div class="card">
+        <h2>Unsupervised Methods</h2>
+        <p class="text-muted mb-4">Core unsupervised concepts demonstrated in the M4 module.</p>
+        
+        <ul class="clean-list">
+            <li>
+                <strong>Clustering Algorithms</strong>
+                <span class="text-muted d-block text-sm">KMeans, Hierarchical Clustering, DBSCAN</span>
+            </li>
+            <li>
+                <strong>Dimensionality Reduction</strong>
+                <span class="text-muted d-block text-sm">PCA</span>
+            </li>
+            <li>
+                <strong>Anomaly Detection</strong>
+                <span class="text-muted d-block text-sm">Isolation Forest</span>
+            </li>
+            <li>
+                <strong>Cluster Evaluation</strong>
+                <span class="text-muted d-block text-sm">Elbow Method, Silhouette Score</span>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="card">
+        <h2>Cluster Interpretation</h2>
+        <p class="text-muted mb-4">Cluster labels were evaluated as features for the Random Forest model.</p>
+        
+        <div class="alert alert-info">
+            <h4 class="alert-heading">Experimental Result (R² 0.4868)</h4>
+            <p class="mb-0 text-sm">The mathematical cluster labels did not provide additional predictive improvement for the evaluated Random Forest experiment. This demonstrates that unsupervised clusters are not automatically useful predictive features.</p>
+        </div>
+
+        <h3 class="mt-4 mb-2">Algorithm Availability</h3>
+        <ul class="clean-list">
+            <li>
+                <strong>Optional Implementations</strong>
+                <span class="text-muted d-block text-sm">UMAP, One-Class SVM, Autoencoder Preview</span>
+                <span class="badge mt-1">Optional — unavailable in current environment</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Unsupervised Visualizations Gallery</h2>
+    <p class="text-muted mb-3">Clustering algorithms, dimensionality reduction, and evaluation diagnostics from M4.</p>
+    
+    <div class="grid-2 mt-3">
+        <div class="chart-container text-center">
+            <h4 class="mb-2">1. PCA 2D Cluster Projection</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='pca_clusters.png') }}" class="img-fluid" alt="PCA Clusters" style="max-height: 420px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Principal Component Analysis projecting 130 features onto 2 orthogonal axes.</p>
+        </div>
+        <div class="chart-container text-center">
+            <h4 class="mb-2">2. K-Means Elbow Method</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='elbow_curve.png') }}" class="img-fluid" alt="Elbow Curve" style="max-height: 420px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Within-Cluster Sum of Squares (Inertia) vs number of clusters k.</p>
+        </div>
+    </div>
+    
+    <div class="grid-2 mt-4">
+        <div class="chart-container text-center">
+            <h4 class="mb-2">3. Silhouette Score Analysis</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='silhouette_scores.png') }}" class="img-fluid" alt="Silhouette Scores" style="max-height: 420px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Cluster separation and cohesion metric across varying cluster counts.</p>
+        </div>
+        <div class="chart-container text-center">
+            <h4 class="mb-2">4. DBSCAN Density Clusters & Noise</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='dbscan_clusters.png') }}" class="img-fluid" alt="DBSCAN Clusters" style="max-height: 420px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Density-based spatial clustering identifying dense cores and outlier noise.</p>
+        </div>
+    </div>
+    
+    <div class="grid-2 mt-4">
+        <div class="chart-container text-center">
+            <h4 class="mb-2">5. Hierarchical Clustering Dendrogram</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='dendrogram.png') }}" class="img-fluid" alt="Dendrogram" style="max-height: 420px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Agglomerative tree hierarchy illustrating pairwise sample linkage distance.</p>
+        </div>
+        <div class="chart-container text-center">
+            <h4 class="mb-2">6. t-SNE Non-Linear Manifold Embedding</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='tsne_visualization.png') }}" class="img-fluid" alt="t-SNE Visualization" style="max-height: 420px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">t-Distributed Stochastic Neighbor Embedding preserving local neighborhood topology.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

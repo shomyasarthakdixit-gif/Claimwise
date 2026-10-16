@@ -1,0 +1,26 @@
+{
+    "sample_size": 15000,
+    "random_seed": 42,
+    "selected_model": "Gradient Boosting",
+    "reason": "Achieved the highest test R2 among the models in the controlled final comparison.",
+    "results": [
+        {
+            "model": "Ridge Regression",
+            "r2": 0.4928203363615987,
+            "rmse": 2023.3141617332867,
+            "mae": 1352.1902102702377
+        },
+        {
+            "model": "Random Forest",
+            "r2": 0.5086677871186959,
+            "rmse": 1991.4528334791796,
+            "mae": 1284.5556358
+        },
+        {
+            "model": "Gradient Boosting",
+            "r2": 0.5290118599414306,
+            "rmse": 1949.7879913821903,
+            "mae": 1278.039989291551
+        }
+    ]
+}

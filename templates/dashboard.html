@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - ClaimWise{% endblock %}
+{% block context_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>ClaimWise Dashboard Overview</h1>
+    <p>High-level metrics and model status for the ClaimWise insurance pipeline.</p>
+</div>
+
+<div class="dashboard-grid">
+    <!-- Dataset Summary -->
+    <div class="card">
+        <h2 class="card-title">Dataset Health</h2>
+        <div class="metric-group">
+            <div class="metric-row">
+                <span class="metric-label">Total Training Records</span>
+                <strong class="metric-value">188,318</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Total Features</span>
+                <strong class="metric-value">130</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Target Variable</span>
+                <strong class="metric-value">loss (Continuous)</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Missing Value Status</span>
+                <strong class="metric-value text-success">Imputed by pipeline</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Status -->
+    <div class="card">
+        <h2 class="card-title">Pipeline Status</h2>
+        <div class="metric-group">
+            <div class="metric-row">
+                <span class="metric-label">M1 — ML Lifecycle</span>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">M2 — Linear Models</span>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">M3 — Tree Models</span>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">M4 — Unsupervised Analysis</span>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">M5 — Model Evaluation & Calibration</span>
+                <span class="badge badge-success">Complete</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label text-muted">M6 — ML Engineering</span>
+                <span class="badge badge-neutral">In Progress / Docker</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Model Summary -->
+<div class="card mb-4">
+    <div class="card-header-flex">
+        <h2 class="card-title mb-0">Evaluation Baseline</h2>
+        <a href="{{ url_for('reports.reports') }}" class="btn btn-sm">View Full Report</a>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-box">
+            <div class="stat-label">M2 Ridge Baseline Test R²</div>
+            <div class="stat-number text-sage">0.4741</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">M3 Random Forest Baseline Test R²</div>
+            <div class="stat-number text-sage">0.4868</div>
+        </div>
+    </div>
+    <p class="text-muted text-sm mt-3">
+        <em>Note: Values derived from existing evaluation artifacts. ClaimWise models focus on continuous loss severity estimation, rather than binary fraud classification.</em>
+    </p>
+</div>
+
+<!-- Artifact Summary -->
+<div class="card">
+    <h2 class="card-title">Available Artifacts</h2>
+    <div class="artifact-grid">
+        <div class="artifact-col">
+            <h4 class="artifact-heading">Saved Models</h4>
+            <ul class="artifact-list">
+                {% for m in summary.models %}
+                <li>{{ m }}</li>
+                {% else %}
+                <li class="text-muted">No models found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="artifact-col">
+            <h4 class="artifact-heading">Generated Reports</h4>
+            <ul class="artifact-list">
+                {% for r in summary.reports %}
+                <li>{{ r }}</li>
+                {% else %}
+                <li class="text-muted">No reports found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="artifact-col">
+            <h4 class="artifact-heading">Clustering Outputs</h4>
+            <ul class="artifact-list">
+                {% for c in summary.clusters %}
+                <li>{{ c }}</li>
+                {% else %}
+                <li class="text-muted">No clustering outputs found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

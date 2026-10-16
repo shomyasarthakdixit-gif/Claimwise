@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}02 Linear Models - ClaimWise{% endblock %}
+{% block context_title %}02 Linear Models{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Linear Models</h1>
+    <p class="text-muted">M2 — Linear regression techniques and baseline evaluations.</p>
+</div>
+
+<div class="grid-2 mb-4">
+    <div class="card">
+        <h2>ClaimWise Linear Baseline</h2>
+        <p class="text-muted mb-4">The evaluated test-set R² for the documented linear regression experiment. Results are for evaluated experiments/splits and should not be interpreted as universal bounds.</p>
+        
+        {% if baseline %}
+        <div class="grid-2 mb-3">
+            <div class="metric-card">
+                <span class="metric-label">Test R²</span>
+                <strong class="metric-value text-primary">0.4928</strong>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">RMSE</span>
+                <strong class="metric-value text-primary">2023.31</strong>
+            </div>
+        </div>
+        <div class="metric-group">
+            <div class="metric-row">
+                <span class="metric-label">Model</span>
+                <strong>Ridge Regression</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Sample Size</span>
+                <strong>15000</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Random Seed</span>
+                <strong>42</strong>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <h3>No Baseline Found</h3>
+            <p class="text-muted">Baseline results could not be located in artifacts.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Educational Demonstrations</h2>
+        <p class="text-muted mb-4">The following linear techniques were demonstrated during module development.</p>
+        
+        <ul class="clean-list">
+            <li>
+                <strong>Linear Regression</strong>
+                <span class="text-muted d-block text-sm">Normal Equation & Gradient Descent</span>
+            </li>
+            <li>
+                <strong>Regularization</strong>
+                <span class="text-muted d-block text-sm">Ridge, Lasso, and Elastic Net</span>
+            </li>
+            <li>
+                <strong>Classification Basics</strong>
+                <span class="text-muted d-block text-sm">Logistic Regression, Softmax Regression</span>
+                <span class="badge badge-warning mt-1">Derived educational classification target — NOT a fraud label.</span>
+            </li>
+            <li>
+                <strong>Preprocessing</strong>
+                <span class="text-muted d-block text-sm">Feature Scaling, Categorical Encoding, Missing Value Handling</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Linear Model Diagnostic Visualizations</h2>
+    <p class="text-muted mb-3">Model fit diagnostics and residual distributions evaluated on the hold-out test set.</p>
+    
+    <div class="grid-2">
+        <div class="chart-container text-center">
+            <h4 class="mb-2">Actual vs. Predicted Loss</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='actual_vs_predicted.png') }}" class="img-fluid" alt="Actual vs Predicted Loss" style="max-height: 420px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Predicted vs true values showing linear trend with variance expansion at tail.</p>
+        </div>
+        <div class="chart-container text-center">
+            <h4 class="mb-2">Residual Error Plot</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='residual_plot.png') }}" class="img-fluid" alt="Residual Plot" style="max-height: 420px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Residual distribution centered near zero with asymmetric positive outliers.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

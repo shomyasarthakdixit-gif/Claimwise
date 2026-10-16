@@ -1,0 +1,31 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Testing & Caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment & Local configs
+.env
+venv/
+env/
+
+# Logs & Databases
+*.log
+logs/*
+!logs/.gitkeep
+instance/*.db
+
+# Temporary test dumps
+/test.csv
+test_output*.txt
+test_dataset_output*.txt

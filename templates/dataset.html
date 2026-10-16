@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Dataset Explorer - ClaimWise{% endblock %}
+{% block context_title %}Dataset Explorer{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Dataset Explorer</h1>
+    <p>View, filter, and search the registered datasets. Values are strictly paginated from the backend.</p>
+</div>
+
+<div class="card mb-4">
+    <form method="GET" action="{{ url_for('dataset.explorer') }}" class="dataset-controls">
+        <div class="control-group">
+            <label class="control-label">Dataset</label>
+            <select name="dataset" onchange="this.form.submit()" class="form-control">
+                <option value="train" {% if current_dataset == 'train' %}selected{% endif %}>train.csv</option>
+                <option value="test" {% if current_dataset == 'test' %}selected{% endif %}>test.csv</option>
+                <option value="sample_submission" {% if current_dataset == 'sample_submission' %}selected{% endif %}>sample_submission.csv</option>
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">Rows per page</label>
+            <select name="page_size" onchange="this.form.submit()" class="form-control">
+                <option value="25" {% if page_size == 25 %}selected{% endif %}>25</option>
+                <option value="50" {% if page_size == 50 %}selected{% endif %}>50</option>
+                <option value="100" {% if page_size == 100 %}selected{% endif %}>100</option>
+                <option value="250" {% if page_size == 250 %}selected{% endif %}>250</option>
+            </select>
+        </div>
+        
+        <div class="control-group flex-grow">
+            <label class="control-label">Global Search</label>
+            <input type="text" name="search" value="{{ search }}" class="form-control" placeholder="Search across all columns...">
+        </div>
+        
+        <div class="control-group filter-group">
+            <label class="control-label">Column Filter</label>
+            <div class="filter-flex">
+                <select name="filter_column" class="form-control">
+                    <option value="">-- Select Column --</option>
+                    <option value="cat1" {% if filter_column == 'cat1' %}selected{% endif %}>cat1</option>
+                    <option value="cont1" {% if filter_column == 'cont1' %}selected{% endif %}>cont1</option>
+                    <!-- Expand options gracefully if schema allows -->
+                </select>
+                <input type="text" name="filter_value" value="{{ filter_value }}" class="form-control" placeholder="Value...">
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-header-flex mb-3">
+        <div class="results-summary">
+            Showing page {{ current_page }} of {{ total_pages }} 
+            <span class="text-muted ml-2">(Total matched rows: {{ total_rows }})</span>
+        </div>
+        <div>
+            <a href="{{ url_for('dataset.download', dataset=current_dataset) }}" class="btn btn-sm">Download CSV</a>
+        </div>
+    </div>
+
+    {% if total_rows == 0 %}
+        <div class="empty-state">
+            <div class="empty-icon">📊</div>
+            <h3>No Records Found</h3>
+            <p class="text-muted">No records match your current filters.</p>
+            <a href="{{ url_for('dataset.explorer', dataset=current_dataset) }}" class="btn mt-3">Clear Filters</a>
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        {% for col in columns %}
+                        <th>
+                            <a href="{{ url_for('dataset.explorer', dataset=current_dataset, page_size=page_size, search=search, filter_column=filter_column, filter_value=filter_value, sort=col, order='desc' if sort == col and order == 'asc' else 'asc') }}" class="sort-link">
+                                {{ col }} 
+                                {% if sort == col %}
+                                    <span class="sort-icon">{% if order == 'desc' %}&#9660;{% else %}&#9650;{% endif %}</span>
+                                {% else %}
+                                    <span class="sort-icon text-muted" style="opacity: 0.3;">&#9650;</span>
+                                {% endif %}
+                            </a>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in table_data %}
+                    <tr>
+                        {% for col in columns %}
+                        <td>{{ row[col] if (row[col]|string) != 'nan' else '<span class="text-muted italic">Missing</span>'|safe }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="pagination-wrapper mt-4">
+            <div class="pagination">
+                {% if current_page > 1 %}
+                    <a href="{{ url_for('dataset.explorer', dataset=current_dataset, page=1, page_size=page_size, search=search, filter_column=filter_column, filter_value=filter_value, sort=sort, order=order) }}" class="btn btn-sm">&laquo; First</a>
+                    <a href="{{ url_for('dataset.explorer', dataset=current_dataset, page=current_page-1, page_size=page_size, search=search, filter_column=filter_column, filter_value=filter_value, sort=sort, order=order) }}" class="btn btn-sm">Previous</a>
+                {% else %}
+                    <span class="btn btn-sm disabled">&laquo; First</span>
+                    <span class="btn btn-sm disabled">Previous</span>
+                {% endif %}
+                
+                <span class="pagination-current">Page {{ current_page }}</span>
+                
+                {% if current_page < total_pages %}
+                    <a href="{{ url_for('dataset.explorer', dataset=current_dataset, page=current_page+1, page_size=page_size, search=search, filter_column=filter_column, filter_value=filter_value, sort=sort, order=order) }}" class="btn btn-sm">Next</a>
+                    <a href="{{ url_for('dataset.explorer', dataset=current_dataset, page=total_pages, page_size=page_size, search=search, filter_column=filter_column, filter_value=filter_value, sort=sort, order=order) }}" class="btn btn-sm">Last &raquo;</a>
+                {% else %}
+                    <span class="btn btn-sm disabled">Next</span>
+                    <span class="btn btn-sm disabled">Last &raquo;</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

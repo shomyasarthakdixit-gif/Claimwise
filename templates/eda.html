@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}EDA - ClaimWise{% endblock %}
+{% block context_title %}Exploratory Data Analysis{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Exploratory Data Analysis</h1>
+    <p>Visualizing feature distributions, relationships, and clustering outputs from the pipeline.</p>
+</div>
+
+<div class="chart-grid">
+    <!-- Distributions -->
+    <div class="card chart-card">
+        <h3 class="chart-title">Loss Distribution</h3>
+        <div class="chart-wrapper">
+            <img src="{{ url_for('dataset.serve_plot', filename='loss_distribution.png') }}" class="responsive-chart" alt="Histogram of Loss" onerror="this.onerror=null; this.src='{{ url_for('modules.serve_plot', filename='loss_distribution.png') }}';">
+        </div>
+    </div>
+    
+    <div class="card chart-card">
+        <h3 class="chart-title">Continuous Feature Distribution</h3>
+        <div class="chart-wrapper">
+            <img src="{{ url_for('dataset.serve_plot', filename='feature_distribution.png') }}" class="responsive-chart" alt="Histogram of Continuous Feature" onerror="this.onerror=null; this.src='{{ url_for('modules.serve_plot', filename='feature_distribution.png') }}';">
+        </div>
+    </div>
+
+    <!-- Relationships -->
+    <div class="card chart-card">
+        <h3 class="chart-title">Feature Relationships (Pairplot)</h3>
+        <div class="chart-wrapper">
+            <img src="{{ url_for('dataset.serve_plot', filename='pairplot.png') }}" class="responsive-chart" alt="Pairplot" onerror="this.onerror=null; this.src='{{ url_for('modules.serve_plot', filename='pairplot.png') }}';">
+        </div>
+    </div>
+    
+    <div class="card chart-card">
+        <h3 class="chart-title">Density Curve (KDE)</h3>
+        <div class="chart-wrapper">
+            <img src="{{ url_for('dataset.serve_plot', filename='kde_density.png') }}" class="responsive-chart" alt="KDE Plot" onerror="this.onerror=null; this.src='{{ url_for('modules.serve_plot', filename='kde_density.png') }}';">
+        </div>
+    </div>
+
+    <!-- Unsupervised Learning -->
+    <div class="card chart-card" style="grid-column: 1 / -1;">
+        <h3 class="chart-title">PCA Clusters</h3>
+        <div class="chart-wrapper">
+            <img src="{{ url_for('dataset.serve_plot', filename='pca_clusters.png') }}" class="responsive-chart" alt="PCA Clusters" onerror="this.onerror=null; this.src='{{ url_for('modules.serve_plot', filename='pca_clusters.png') }}';">
+        </div>
+    </div>
+</div>
+{% endblock %}

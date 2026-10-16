@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Prediction - ClaimWise{% endblock %}
+{% block context_title %}Prediction Services{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Prediction Interface</h1>
+    <p class="text-muted">Run single inference or process batch claims using trained models.</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header-flex mb-3">
+        <div>
+            <h2>Single Prediction</h2>
+            <p class="text-muted">Test individual claims against the selected final model.</p>
+        </div>
+    </div>
+    
+    <form method="POST" action="{{ url_for('prediction.single_prediction') }}" class="prediction-form">
+        <div class="form-group mb-4">
+            <label class="form-label">Selected ClaimWise Model</label>
+            <select name="model_id" class="form-control" style="max-width: 300px;">
+                {% for m_id, m_file in supported_models.items() %}
+                    <option value="{{ m_id }}" {% if current_model is defined and m_id == current_model %}selected{% endif %}>{{ m_id|replace('_', ' ')|title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if categorical_features or continuous_features %}
+            <div class="feature-grid">
+                <!-- Categorical Features -->
+                <div class="feature-section">
+                    <h3 class="feature-heading">Categorical Features ({{ categorical_features|length }})</h3>
+                    <div class="feature-list">
+                        {% for col in categorical_features %}
+                        <div class="form-group-sm">
+                            <label class="form-label-sm">{{ col }}</label>
+                            <input type="text" name="{{ col }}" class="form-control-sm" value="{{ input_data.get(col, 'A') if input_data is defined else 'A' }}" required>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Continuous Features -->
+                <div class="feature-section">
+                    <h3 class="feature-heading">Continuous Features ({{ continuous_features|length }})</h3>
+                    <div class="feature-list">
+                        {% for col in continuous_features %}
+                        <div class="form-group-sm">
+                            <label class="form-label-sm">{{ col }}</label>
+                            <input type="number" step="any" name="{{ col }}" class="form-control-sm" value="{{ input_data.get(col, '0.5') if input_data is defined else '0.5' }}" required>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions mt-4 pt-3 border-top">
+                <button type="submit" name="predict_single" value="1" class="btn btn-primary">Generate Prediction</button>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">⚙️</div>
+                <h3>No Schema Loaded</h3>
+                <p class="text-muted">The feature schema could not be loaded for prediction.</p>
+            </div>
+        {% endif %}
+    </form>
+</div>
+
+{% if prediction_result is defined and prediction_result is not none %}
+<div class="card success-card mb-4">
+    <h3>Prediction Result</h3>
+    <div class="prediction-value">
+        Estimated Claim Loss: {{ "%.2f"|format(prediction_result) }}
+    </div>
+    
+    <div class="grid-2 mt-3">
+        <div>
+            <span class="metric-label">Model Used</span>
+            <strong class="metric-value">{{ current_model|replace('_', ' ')|title }}</strong>
+        </div>
+        <div>
+            <span class="metric-label">Input Status</span>
+            <strong class="metric-value">Validated</strong>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header-flex mb-3">
+        <div>
+            <h2>Batch Prediction</h2>
+            <p class="text-muted">Upload a CSV file containing multiple claims for batch processing. Maximum 50,000 rows.</p>
+        </div>
+    </div>
+    
+    <div class="alert alert-info mb-3">
+        <strong>Target Variable Note:</strong> If the uploaded CSV contains the <code>loss</code> column, it will be automatically detected and excluded from prediction.
+    </div>
+
+    <form method="POST" action="{{ url_for('prediction.batch_prediction') }}" enctype="multipart/form-data" class="batch-form">
+        <div class="grid-3 align-end">
+            <div class="form-group mb-0">
+                <label class="form-label">Selected ClaimWise Model</label>
+                <select name="model_id" class="form-control">
+                    {% for m_id, m_file in supported_models.items() %}
+                        <option value="{{ m_id }}">{{ m_id|replace('_', ' ')|title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group mb-0">
+                <label class="form-label">CSV File</label>
+                <input type="file" name="csv_file" accept=".csv" class="form-control" required>
+            </div>
+            
+            <div class="form-group mb-0">
+                <button type="submit" class="btn btn-primary w-100">Process Batch</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

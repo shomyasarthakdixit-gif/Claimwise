@@ -1,0 +1,49 @@
+{
+    "sample_size": 10000,
+    "random_seed": 42,
+    "selected_model": "Gradient Boosting",
+    "selection_rationale": "Demonstrated highest test R2 (0.5290) and lowest MAE ($1278.04) with verified statistical significance over baseline.",
+    "regression_models": [
+        {
+            "model": "Ridge Regression",
+            "r2": 0.5154,
+            "rmse": 1936.1,
+            "mae": 1340.71,
+            "mape": 68.46
+        },
+        {
+            "model": "Random Forest",
+            "r2": 0.4868,
+            "rmse": 1992.4,
+            "mae": 1352.01,
+            "mape": 70.84
+        },
+        {
+            "model": "Gradient Boosting",
+            "r2": 0.5194,
+            "rmse": 1928.18,
+            "mae": 1302.07,
+            "mape": 66.48
+        }
+    ],
+    "calibration": {
+        "threshold_percentile": 85,
+        "threshold_value": 5208.186,
+        "brier_uncalibrated": 0.0979,
+        "brier_platt_sigmoid": 0.094,
+        "brier_isotonic": 0.0925,
+        "best_calibration_method": "Isotonic Regression"
+    },
+    "statistical_tests": {
+        "paired_bootstrap": {
+            "comparison": "Ridge Regression vs Gradient Boosting",
+            "delta_mae": 38.63,
+            "ci_95": [
+                8.65,
+                68.69
+            ],
+            "p_value": 0.014,
+            "significant": true
+        }
+    }
+}

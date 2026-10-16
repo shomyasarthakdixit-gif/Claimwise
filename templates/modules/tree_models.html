@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}03 Tree Models - ClaimWise{% endblock %}
+{% block context_title %}03 Tree Models{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <h1>Tree Models</h1>
+    <p class="text-muted">M3 — Tree-based and ensemble machine learning approaches.</p>
+</div>
+
+<div class="grid-2 mb-4">
+    <div class="card">
+        <h2>Model Comparisons</h2>
+        <p class="text-muted mb-3">Highest R² among the evaluated models on the corresponding sampled experiment. These are strictly evaluated experimental baselines.</p>
+        
+        <div class="metric-group">
+            <div class="metric-row">
+                <span class="metric-label">Decision Tree (Pre-pruned)</span>
+                <strong>0.3219</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Bagging</span>
+                <strong>0.4558</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">AdaBoost</span>
+                <strong>0.2638</strong>
+            </div>
+        </div>
+        <hr>
+        <div class="metric-group mt-3">
+            <div class="metric-row">
+                <span class="metric-label">Selected ClaimWise Model (GB)</span>
+                <strong class="text-success">0.5290</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Tree Ensemble Comparison (RF)</span>
+                <strong class="text-primary">0.5087</strong>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Linear Baseline (Ridge)</span>
+                <strong>0.4928</strong>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>Ensemble Techniques</h2>
+        <p class="text-muted mb-4">The following algorithms were explored in the M3 module:</p>
+        
+        <ul class="clean-list">
+            <li>
+                <strong>Decision Trees</strong>
+                <span class="text-muted d-block text-sm">Bias-variance trade-offs and tree pruning.</span>
+            </li>
+            <li>
+                <strong>Bagging</strong>
+                <span class="text-muted d-block text-sm">Bootstrap aggregation and Random Forests.</span>
+            </li>
+            <li>
+                <strong>Boosting</strong>
+                <span class="text-muted d-block text-sm">AdaBoost and Gradient Boosting concepts.</span>
+            </li>
+            <li>
+                <strong>Advanced Boosting</strong>
+                <span class="text-muted d-block text-sm">XGBoost and LightGBM</span>
+                <span class="badge mt-1">Optional — unavailable in current environment</span>
+            </li>
+            <li>
+                <strong>Interpretability</strong>
+                <span class="text-muted d-block text-sm">Feature Importance analysis.</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Tree Model Visualizations & Feature Importances</h2>
+    <p class="text-muted mb-3">Feature importance rankings and baseline performance comparisons.</p>
+    
+    <div class="grid-2 mt-3">
+        <div class="chart-container text-center">
+            <h4 class="mb-2">Top 20 Feature Importances</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='feature_importance.png') }}" class="img-fluid" alt="Top Feature Importances" style="max-height: 440px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">Gini importance / mean decrease in impurity across Random Forest decision trees.</p>
+        </div>
+        <div class="chart-container text-center">
+            <h4 class="mb-2">M2 Linear vs M3 Tree Baseline Comparison</h4>
+            <img src="{{ url_for('modules.serve_plot', filename='model_comparison.png') }}" class="img-fluid" alt="Model Comparison Plot" style="max-height: 440px; border-radius: 8px;">
+            <p class="text-muted text-sm mt-2">R² score comparison showing tree-based ensemble superiority over linear models.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

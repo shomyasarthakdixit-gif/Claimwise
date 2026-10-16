@@ -1,0 +1,16 @@
+.git
+.gitignore
+.idea
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+*.log
+logs/*
+!logs/.gitkeep
+data/raw
+data/interim
+test_dataset_output*.txt
+test_output*.txt
+instance/*.db

@@ -1,0 +1,52 @@
+============================================================
+                 DATA QUALITY REPORT                        
+============================================================
+
+--- TRAIN.CSV ---
+Validation Status:                  PASS
+Expected Columns:                   132
+Detected Columns:                   132
+Original Records (incl. corrupted): 200868
+Original Valid Records:             194592
+Reconstructed Duplicate Records:    0
+Quarantined Records:                6276
+Final Modeling Records:             194592
+Missing Value Summary:
+  Total Missing:        0
+Duplicate Summary:
+  Duplicate Rows:       6274
+  Duplicate IDs:        6274
+Quarantine Reasons:
+  - 1 record(s): Column count mismatch. Expected 132, got 12.
+  - 6275 record(s): Empty or isolated quote mark line.
+
+--- TEST.CSV ---
+Validation Status:                  PASS
+Expected Columns:                   131
+Detected Columns:                   131
+Original Records (incl. corrupted): 125546
+Original Valid Records:             125546
+Reconstructed Duplicate Records:    0
+Quarantined Records:                0
+Final Modeling Records:             125546
+Missing Value Summary:
+  Total Missing:        0
+Duplicate Summary:
+  Duplicate Rows:       0
+  Duplicate IDs:        0
+
+--- SAMPLE_SUBMISSION.CSV ---
+Validation Status:                  PASS
+Expected Columns:                   2
+Detected Columns:                   2
+Original Records (incl. corrupted): 125546
+Original Valid Records:             125546
+Reconstructed Duplicate Records:    0
+Quarantined Records:                0
+Final Modeling Records:             125546
+Missing Value Summary:
+  Total Missing:        0
+Duplicate Summary:
+  Duplicate Rows:       0
+  Duplicate IDs:        0
+
